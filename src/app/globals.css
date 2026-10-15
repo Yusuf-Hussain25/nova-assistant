@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
+/* Dark is the default look; light is opt-in via the header toggle. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --bg: #0a0b0a;
+  --side: #0d0e0d;
+  --surface: #111311;
+  --raised: #181a17;
+  --line: #222520;
+  --line-strong: #2e322b;
+  --ink: #f2f4ee;
+  --muted: #9a9e95;
+  --faint: #5f645b;
+  --accent: #c6f36b;
+  --accent-ink: #0b1003;
+  --accent-soft: rgba(198, 243, 107, 0.1);
+  --glow: rgba(198, 243, 107, 0.22);
+  --dot: rgba(255, 255, 255, 0.045);
+  --orb: #c6f36b;
+  --danger: #ff8a7a;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f8f5;
+  --side: #f1f2ee;
+  --surface: #ffffff;
+  --raised: #eceee8;
+  --line: #e1e4dc;
+  --line-strong: #cfd3c8;
+  --ink: #141612;
+  --muted: #62675d;
+  --faint: #9a9f93;
+  --accent: #4d7c0f;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(77, 124, 15, 0.1);
+  --glow: rgba(77, 124, 15, 0.18);
+  --dot: rgba(0, 0, 0, 0.06);
+  --orb: #4d7c0f;
+  --danger: #b42318;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-side: var(--side);
+  --color-line-strong: var(--line-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Faint dot grid behind the welcome screen */
+@utility dots {
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 30%, transparent 75%);
+}
+
+@utility glow {
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 0 60px -6px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+@layer base {
+  kbd {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    background: var(--surface);
+  }
+}
+
+/* Markdown inside assistant replies */
+.md {
+  line-height: 1.7;
+  font-size: 15.5px;
+  overflow-wrap: anywhere;
+}
+.md > * + * { margin-top: 0.85em; }
+.md h1, .md h2, .md h3 { font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; margin-top: 1.4em; }
+.md h1 { font-size: 1.3em; }
+.md h2 { font-size: 1.15em; }
+.md h3 { font-size: 1.02em; }
+.md ul, .md ol { padding-left: 1.3em; }
+.md ul { list-style: disc; }
+.md ol { list-style: decimal; }
+.md li + li { margin-top: 0.3em; }
+.md li::marker { color: var(--faint); }
+.md a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; }
+.md a:hover { text-decoration-color: var(--accent); }
+.md strong { font-weight: 600; }
+.md code { font-family: var(--font-mono); font-size: 0.86em; background: var(--raised); border: 1px solid var(--line); border-radius: 5px; padding: 0.1em 0.35em; }
+.md pre { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.6; }
+.md pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+.md blockquote { border-left: 2px solid var(--line); padding-left: 1em; color: var(--muted); }
+.md table { width: 100%; border-collapse: collapse; font-size: 14px; display: block; overflow-x: auto; }
+.md th, .md td { border-bottom: 1px solid var(--line); padding: 8px 12px 8px 0; text-align: left; vertical-align: top; }
+.md th { font-weight: 600; color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.md hr { border: 0; border-top: 1px solid var(--line); }
+
+/* Streaming caret */
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  border-radius: 1px;
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Tool "working" label */
+.working {
+  background: linear-gradient(90deg, var(--muted) 0%, var(--ink) 50%, var(--muted) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sweep 1.6s linear infinite;
+}
+@keyframes sweep { to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .caret::after, .working { animation: none; }
+  .working { color: var(--muted); background: none; }
 }
