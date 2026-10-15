@@ -1,4 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["sin1"]
+  "regions": ["sin1"],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "nova-assistant-neon.vercel.app" }],
+      "destination": "https://nova.yusufhussain.in/:path*",
+      "permanent": true
+    }
+  ]
 }
